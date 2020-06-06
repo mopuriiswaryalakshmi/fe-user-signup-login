@@ -1,5 +1,17 @@
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
+import {
+  Button,
+  Form,
+  Grid,
+  Header,
+  Image,
+  Message,
+  Segment,
+  Loader
+} from "semantic-ui-react";
 
 // import api from "../config/api";
 // import keys from "../config/credentials";
@@ -19,22 +31,6 @@ class RegistrationForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  //   handleResponse(ticket) {
-  //     this.setState(prevState => ({
-  //       tickets: prevState.tickets.concat(ticket),
-  //       filteredTickets: prevState.tickets.concat(ticket)
-  //     }));
-  //   }
-
-  //   fetchPosts() {
-  //     let token = localStorage.getItem('token');
-  //     // console.log(token);
-  //     http
-  //       .get(`https://teacherflow-cd841.firebaseio.com/posts.json?auth=${token}`)
-  //       .then((res) => console.log(res))
-  //       .catch((err) => console.log(err));
-  //   }
-
   handleSubmit(event) {
     event.preventDefault();
     const formData = {
@@ -51,32 +47,6 @@ class RegistrationForm extends React.Component {
         this.props.history.push("/login");
         console.log("response.data------------------->");
         console.log(response.data);
-
-        // try {
-        //   this.props.history.push("/login");
-        //   console.log("response.data------------------->");
-        //   console.log(response.data);
-        // } catch (error) {
-        //   console.log("inside catch----------.,");
-        //   console.log(JSON.stringify(error), error);
-        // }
-
-        // if (response.data.errors) {
-        //   this.setState({
-        //     hasServerError: true,
-        //     serverErrorMessages: response.data
-        //   });
-        // }
-        // else {
-        //   //   this.props.handleResponse(response.data);
-        //   this.setState({
-        //     name: "",
-        //     email: "",
-        //     password: "",
-        //     confirmPassword: "",
-        //     hasServerError: false
-        //   });
-        // }
       })
       .catch(err => {
         // debugger;
@@ -113,64 +83,94 @@ class RegistrationForm extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2> Add Ticket </h2>
-        <form onSubmit={this.handleSubmit}>
-          {this.state.hasServerError && (
-            <div className="alert alert-danger">
-              <h4> Theses errors prohibitted the form from being saved: </h4>
-              <ul>{this.errorMessageFormatter()}</ul>
-            </div>
-          )}
-          <div className="form-group">
-            <label>
-              Name
-              <input
-                type="text"
-                value={this.state.name}
-                name="name"
-                onChange={this.handleChange}
-                className="form-control"
-              />
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              email
-              <input
-                type="text"
-                value={this.state.email}
-                name="email"
-                onChange={this.handleChange}
-                className="form-control"
-              />
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              Password
-              <textarea
-                value={this.state.password}
-                name="password"
-                onChange={this.handleChange}
-                className="form-control"
-              ></textarea>
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              Confirm Password
-              <textarea
-                value={this.state.confirmPassword}
-                name="confirmPassword"
-                onChange={this.handleChange}
-                className="form-control"
-              ></textarea>
-            </label>
-          </div>
-          <input type="submit" value="Add Signup" className="btn btn-primary" />{" "}
-          or <input type="reset" value="Reset" className="btn btn-secondary" />
-        </form>
+      <div className="register-form">
+        <Grid
+          textAlign="center"
+          style={{ height: "100%" }}
+          verticalAlign="middle"
+        >
+          <Grid.Column style={{ maxWidth: 450 }}>
+            <Link to="/">
+              <Image src="/assets/logo.png" size="tiny" centered />
+            </Link>
+
+            <Header as="h1" color="teal" textAlign="center">
+              Create Account
+            </Header>
+            <Form onSubmit={this.handleSubmit}>
+              {this.state.hasServerError && (
+                <div className="alert alert-danger">
+                  <h4>
+                    {" "}
+                    Theses errors prohibitted the form from being saved:{" "}
+                  </h4>
+                  <ul>{this.errorMessageFormatter()}</ul>
+                </div>
+              )}
+              {/* <div className="form-group"> */}
+              {/* <label>
+                  Name */}
+              <Segment stacked>
+                <Form.Input
+                  placeholder="Name"
+                  type="text"
+                  value={this.state.name}
+                  name="name"
+                  onChange={this.handleChange}
+                  // className="form-control"
+                />
+                {/* </label> */}
+                {/* </div> */}
+                {/* <div className="form-group"> */}
+                {/* <label> */}
+                <Form.Input
+                  placeholder="Email"
+                  type="text"
+                  value={this.state.email}
+                  name="email"
+                  onChange={this.handleChange}
+                  className="form-control"
+                />
+                {/* </label> */}
+                {/* </div> */}
+                {/* <div className="form-group"> */}
+                {/* <label> */}
+                {/* Password */}
+                <Form.Input
+                  placeholder="Password"
+                  value={this.state.password}
+                  name="password"
+                  onChange={this.handleChange}
+                  className="form-control"
+                />
+                {/* </label> */}
+                {/* </div> */}
+                {/* <div className="form-group"> */}
+                {/* <label> */}
+                {/* Confirm Password */}
+                <Form.Input
+                  placeholder="Confirm Password"
+                  value={this.state.confirmPassword}
+                  name="confirmPassword"
+                  onChange={this.handleChange}
+                  className="form-control"
+                />
+                {/* </label> */}
+                {/* </div> */}
+                <Button
+                  type="submit"
+                  value="signup"
+                  className="btn btn-primary"
+                >
+                  Signup
+                </Button>
+              </Segment>
+            </Form>
+            <Message>
+              Already have an account? <Link to="/login">Login</Link>
+            </Message>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }

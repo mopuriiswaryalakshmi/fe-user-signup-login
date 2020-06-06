@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 // import logo from "./logo.svg";
-// import "./App.css";
+import "./index.css";
 import RegistrationForm from "./pages/register";
 import LoginForm from "./pages/login";
 import UserDetailsUpdateForm from "./pages/settings";

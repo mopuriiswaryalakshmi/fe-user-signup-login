@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -44,26 +45,6 @@ class LoginForm extends React.Component {
         localStorage.setItem("token", response.data.data.token);
         console.log(response.data.data.token);
         this.props.history.push("/settings");
-        // this.props.history.push("");
-        // axios({
-        //     method: "put", //you can set what request you want to be
-        //     url: "http://localhost:9000/api/v1/users",
-        //     data: formData,
-        //     headers: { Authorization: "Bearer " + localStorage.getItem("token") }
-        //   })
-        // if (response.data.errors) {
-        //   this.setState({
-        //     hasServerError: true,
-        //     serverErrorMessages: response.data
-        //   });
-        // } else {
-        //   //   this.props.handleResponse(response.data);
-        //   this.setState({
-        //     email: "",
-        //     password: "",
-        //     hasServerError: false
-        //   });
-        // }
       })
       .catch(err => {
         // debugger;
@@ -145,16 +126,10 @@ class LoginForm extends React.Component {
           <button type="submit" value="login" className="btn btn-primary">
             Login
           </button>
-          <button
-            type="submit"
-            className="btn btn-secondary"
-            onClick={this.handleRedirect}
-          >
-            Signup
-          </button>
-          <button className="btn btn-primary" onClick={this.logout}>
+          <Link to="/"> SignUp </Link>
+          {/* <button className="btn btn-primary" onClick={this.logout}>
             LogOut
-          </button>
+          </button> */}
         </form>
       </div>
     );
