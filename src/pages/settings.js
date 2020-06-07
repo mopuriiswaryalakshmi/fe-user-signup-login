@@ -1,5 +1,8 @@
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
+import { Button, Form, Grid, Header } from "semantic-ui-react";
 
 class UserDetailsUpdateForm extends React.Component {
   constructor(props) {
@@ -113,86 +116,80 @@ class UserDetailsUpdateForm extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2> Add Ticket </h2>
-        <form onSubmit={this.handleSubmit}>
-          {this.state.hasServerError && (
-            <div className="alert alert-danger">
-              <h4> Theses errors prohibitted the form from being saved: </h4>
-              <ul>{this.errorMessageFormatter()}</ul>
-            </div>
-          )}
-          <div className="form-group">
-            <label>
-              Name
-              <input
+      <div className="login-form">
+        <Grid
+          textAlign="center"
+          style={{ height: "100%" }}
+          verticalAlign="middle"
+        >
+          <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as="h1" color="teal" textAlign="center">
+              Information Details
+            </Header>
+            <Form onSubmit={this.handleSubmit}>
+              {this.state.hasServerError && (
+                <div className="alert alert-danger">
+                  <h4>
+                    {" "}
+                    Theses errors prohibitted the form from being saved:{" "}
+                  </h4>
+                  <ul>{this.errorMessageFormatter()}</ul>
+                </div>
+              )}
+              <Form.Input
+                placeholder="Name"
                 type="text"
                 value={this.state.name}
                 name="name"
                 onChange={this.handleChange}
                 className="form-control"
               />
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              Address
-              <input
+              <Form.Input
+                placeholder="Address"
                 type="text"
                 value={this.state.address}
                 name="address"
                 onChange={this.handleChange}
                 className="form-control"
               />
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              Profile Picture
-              <textarea
+              <Form.Input
+                placeholder="Profile Picture"
                 value={this.state.profilePicture}
                 name="profilePicture"
                 onChange={this.handleChange}
                 className="form-control"
-              ></textarea>
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              Gender
-              <textarea
+              />
+              <Form.Input
+                placeholder="Gender"
                 value={this.state.gender}
                 name="gender"
                 onChange={this.handleChange}
                 className="form-control"
-              ></textarea>
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              Marital Status
-              <textarea
+              />
+              <Form.Input
+                placeholder="Marital Status"
                 value={this.state.maritalStatus}
                 name="maritalStatus"
                 onChange={this.handleChange}
                 className="form-control"
-              ></textarea>
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              Date Of Birth
-              <textarea
+              />
+              <Form.Input
+                placeholder="Date Of Birth"
                 value={this.state.dateOfBirth}
                 name="dateOfBirth"
                 onChange={this.handleChange}
                 className="form-control"
-              ></textarea>
-            </label>
-          </div>
-          <input type="submit" value="Add Signup" className="btn btn-primary" />{" "}
-          or <input type="reset" value="Reset" className="btn btn-secondary" />
-        </form>
+              />
+              <Button type="submit" className="btn btn-primary">
+                Submit
+              </Button>
+              <Link to="/" onClick={this.logout}>
+                {" "}
+                Logout{" "}
+              </Link>
+            </Form>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }

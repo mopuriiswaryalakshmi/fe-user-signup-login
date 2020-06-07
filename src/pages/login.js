@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Button, Form, Grid, Header, Image } from "semantic-ui-react";
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -14,13 +15,6 @@ class LoginForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-
-  //   handleResponse(ticket) {
-  //     this.setState(prevState => ({
-  //       tickets: prevState.tickets.concat(ticket),
-  //       filteredTickets: prevState.tickets.concat(ticket)
-  //     }));
-  //   }
 
   logout() {
     // localStorage.clear();
@@ -39,7 +33,6 @@ class LoginForm extends React.Component {
 
     axios
       .post("http://localhost:9000/api/v1/login", formData)
-      // axios.defaults.headers.common['header1'] = 'value'
       .then(response => {
         console.log(response.data);
         localStorage.setItem("token", response.data.data.token);
@@ -47,17 +40,12 @@ class LoginForm extends React.Component {
         this.props.history.push("/settings");
       })
       .catch(err => {
-        // debugger;
         let catchError;
         if (err.response.data.error.errors) {
           catchError = err.response.data.error.errors;
         } else {
           catchError = err.response.data.error.message;
         }
-        // debugger;
-        // debugger;
-        console.log("err in catch ------------>");
-        console.log(JSON.stringify(err));
         this.setState({
           hasServerError: true,
           serverErrorMessages: catchError
@@ -91,46 +79,53 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2> Add Login </h2>
-        <form onSubmit={this.handleSubmit}>
-          {this.state.hasServerError && (
-            <div className="alert alert-danger">
-              <h4> Theses errors prohibitted the form from being saved: </h4>
-              <ul>{this.errorMessageFormatter()}</ul>
-            </div>
-          )}
-          <div className="form-group">
-            <label>
-              email
-              <input
+      <div className="login-form">
+        <Grid
+          textAlign="center"
+          style={{ height: "100%" }}
+          verticalAlign="middle"
+        >
+          <Grid.Column style={{ maxWidth: 450 }}>
+            <Link to="/">
+              <Image src="/assets/logo.png" size="tiny" centered />
+            </Link>
+
+            <Header as="h2" color="teal" textAlign="center">
+              Login
+            </Header>
+            <Form onSubmit={this.handleSubmit}>
+              {this.state.hasServerError && (
+                <div className="alert alert-danger">
+                  <h4>
+                    {" "}
+                    Theses errors prohibitted the form from being saved:{" "}
+                  </h4>
+                  <ul>{this.errorMessageFormatter()}</ul>
+                </div>
+              )}
+              <Form.Input
+                placeholder="Email"
                 type="text"
                 value={this.state.email}
                 name="email"
                 onChange={this.handleChange}
                 className="form-control"
               />
-            </label>
-          </div>
-          <div className="form-group">
-            <label>
-              Password
-              <textarea
+              <Form.Input
+                placeholder="Password"
+                type="password"
                 value={this.state.password}
                 name="password"
                 onChange={this.handleChange}
                 className="form-control"
-              ></textarea>
-            </label>
-          </div>
-          <button type="submit" value="login" className="btn btn-primary">
-            Login
-          </button>
-          <Link to="/"> SignUp </Link>
-          {/* <button className="btn btn-primary" onClick={this.logout}>
-            LogOut
-          </button> */}
-        </form>
+              />
+              <Button type="submit" value="login" className="btn btn-primary">
+                Login
+              </Button>
+              <Link to="/"> SignUp </Link>
+            </Form>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }

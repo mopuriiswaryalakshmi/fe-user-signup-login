@@ -9,12 +9,8 @@ import {
   Header,
   Image,
   Message,
-  Segment,
-  Loader
+  Segment
 } from "semantic-ui-react";
-
-// import api from "../config/api";
-// import keys from "../config/credentials";
 
 class RegistrationForm extends React.Component {
   constructor(props) {
@@ -45,16 +41,17 @@ class RegistrationForm extends React.Component {
 
       .then(response => {
         this.props.history.push("/login");
-        console.log("response.data------------------->");
-        console.log(response.data);
       })
       .catch(err => {
-        // debugger;
-        console.log("err in catch ------------>");
-        console.log(JSON.stringify(err));
+        let catchError;
+        if (err.response.data.error.errors) {
+          catchError = err.response.data.error.errors;
+        } else {
+          catchError = err.response.data.error.message;
+        }
         this.setState({
           hasServerError: true,
-          serverErrorMessages: err.response.data.error.message
+          serverErrorMessages: catchError
         });
       });
   }
@@ -107,9 +104,6 @@ class RegistrationForm extends React.Component {
                   <ul>{this.errorMessageFormatter()}</ul>
                 </div>
               )}
-              {/* <div className="form-group"> */}
-              {/* <label>
-                  Name */}
               <Segment stacked>
                 <Form.Input
                   placeholder="Name"
@@ -119,10 +113,6 @@ class RegistrationForm extends React.Component {
                   onChange={this.handleChange}
                   // className="form-control"
                 />
-                {/* </label> */}
-                {/* </div> */}
-                {/* <div className="form-group"> */}
-                {/* <label> */}
                 <Form.Input
                   placeholder="Email"
                   type="text"
@@ -131,11 +121,6 @@ class RegistrationForm extends React.Component {
                   onChange={this.handleChange}
                   className="form-control"
                 />
-                {/* </label> */}
-                {/* </div> */}
-                {/* <div className="form-group"> */}
-                {/* <label> */}
-                {/* Password */}
                 <Form.Input
                   placeholder="Password"
                   value={this.state.password}
@@ -143,11 +128,6 @@ class RegistrationForm extends React.Component {
                   onChange={this.handleChange}
                   className="form-control"
                 />
-                {/* </label> */}
-                {/* </div> */}
-                {/* <div className="form-group"> */}
-                {/* <label> */}
-                {/* Confirm Password */}
                 <Form.Input
                   placeholder="Confirm Password"
                   value={this.state.confirmPassword}
@@ -155,8 +135,6 @@ class RegistrationForm extends React.Component {
                   onChange={this.handleChange}
                   className="form-control"
                 />
-                {/* </label> */}
-                {/* </div> */}
                 <Button
                   type="submit"
                   value="signup"
