@@ -1,15 +1,14 @@
 import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-// import FileBase64 from "react-file-base64";
+import { Form, Grid, Header } from "semantic-ui-react";
 
-import { Button, Form, Grid, Header } from "semantic-ui-react";
+import { API_URL } from "../config";
 
 class UserDetailsUpdateForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
       address: "",
       profilePicture: "",
       gender: "",
@@ -20,93 +19,41 @@ class UserDetailsUpdateForm extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    // this.onFileChangeHandler = this.onFileChangeHandler.bind(this);
     this.fileChange = this.fileChange.bind(this);
+  }
+
+  componentDidMount() {
+    if (!localStorage.getItem("token")) this.props.history.replace("/login");
   }
 
   logout() {
     localStorage.clear();
-    // this.props.history.push("/");
-    // const token = localStorage.getItem("token");
-    // console.log(token);
   }
-
-  getBase64(file, cb) {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function() {
-      cb(reader.result);
-    };
-    reader.onerror = function(error) {
-      console.log("Error: ", error);
-    };
-  }
-
-  fileChange(image) {
-    let targerFile = image.target.files[0];
-    // console.log("targerFile--------->");
-    // console.log(targerFile);
-    this.getBase64(targerFile, result => {
-      console.log("result base64-------------");
-      console.log(result);
-      this.setState({ profilePicture: result });
-    });
-  }
-
-  // getFiles(files) {
-  //   console.log("Inside Get files-------------->");
-  //   console.log(files);
-  //   this.setState({ profilePicture: files.base64 });
-  // }
-
-  onFileChangeHandler = event => {
-    this.setState({
-      profilePicture: event.target.files[0]
-    });
-  };
-
-  onFileClickHandler = () => {
-    const data = new FormData();
-    data.append("file", this.state.profilePicture);
-    axios
-      .post("http://localhost:9000/api/v1/upload", data, {
-        // receive two    parameter endpoint url ,form data
-      })
-      .then(res => {
-        // then print response status
-        console.log(res.statusText);
-      });
-  };
 
   handleSubmit(event) {
     event.preventDefault();
     const formData = {
-      name: this.state.name,
       address: this.state.address,
       profilePicture: this.state.profilePicture,
       gender: this.state.gender,
       maritalStatus: this.state.maritalStatus,
       dateOfBirth: this.state.dateOfBirth
     };
-    // client side validation
 
     axios({
-      method: "put", //you can set what request you want to be
-      url: "http://localhost:9000/api/v1/users",
+      method: "put",
+      url: `${API_URL}/users`,
       data: formData,
       headers: { Authorization: "Bearer " + localStorage.getItem("token") }
     })
       .then(response => {
-        console.log("SucessFully Submitted");
-        console.log("response.data------------------->");
-        console.log(response.data);
+        this.setState({
+          hasServerError: false,
+          serverErrorMessages: ""
+        });
         alert("SucessFully Submitted");
-        // localStorage.clear();
-        // return <p>"SucessFully Submitted"</p>;
-        // this.props.history.push("/login");
       })
       .catch(err => {
-        // debugger;
         let catchError;
         if (err.response.data.error.errors) {
           catchError = err.response.data.error.errors;
@@ -129,19 +76,26 @@ class UserDetailsUpdateForm extends React.Component {
     });
   }
 
+  getBase64(file, cb) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function() {
+      cb(reader.result);
+    };
+    reader.onerror = function(error) {
+      console.log("Error: ", error);
+    };
+  }
+
+  fileChange(image) {
+    let targerFile = image.target.files[0];
+    this.getBase64(targerFile, result => {
+      this.setState({ profilePicture: result });
+    });
+  }
+
   errorMessageFormatter() {
-    // const { error } = this.state.serverErrorMessages;
-    console.log(this.state.serverErrorMessages);
-    // return Object.keys(error).map(key => {
-    //   console.log(key);
-    //   return (
-    //     <li key={key}>
-    //       {" "}
-    //       <strong> {key} : </strong> {error[key].join(", ")}{" "}
-    //     </li>
-    //   );
     return <p>{this.state.serverErrorMessages}</p>;
-    // });
   }
 
   render() {
@@ -167,14 +121,6 @@ class UserDetailsUpdateForm extends React.Component {
                 </div>
               )}
               <Form.Input
-                placeholder="Name"
-                type="text"
-                value={this.state.name}
-                name="name"
-                onChange={this.handleChange}
-                className="form-control"
-              />
-              <Form.Input
                 placeholder="Address"
                 type="text"
                 value={this.state.address}
@@ -189,24 +135,6 @@ class UserDetailsUpdateForm extends React.Component {
                 onChange={this.fileChange}
                 className="form-control"
               />
-              {/* <FileBase64
-                multiple={false}
-                placeholder="Profile Picture"
-                onDone={this.getFiles.bind(this)}
-              /> */}
-              {/* <Form.Input
-                type="file"
-                name="file"
-                onChange={this.onFileChangeHandler}
-              />
-              <button
-                type="button"
-                class="btn btn-success btn-block"
-                onClick={this.onFileClickHandler}
-              >
-                Upload
-              </button> */}
-              {/* <button onClick={this.onFileUpload}>Upload</button> */}
               <Form.Input
                 placeholder="Gender"
                 type="text"
@@ -231,12 +159,11 @@ class UserDetailsUpdateForm extends React.Component {
                 onChange={this.handleChange}
                 className="form-control"
               />
-              <Button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-primary">
                 Submit
-              </Button>
+              </button>
               <Link to="/" onClick={this.logout}>
-                {" "}
-                Logout{" "}
+                Logout
               </Link>
             </Form>
           </Grid.Column>

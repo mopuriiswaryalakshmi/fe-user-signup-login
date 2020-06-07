@@ -1,7 +1,9 @@
 import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Button, Form, Grid, Header, Image } from "semantic-ui-react";
+import { Form, Grid, Header, Image } from "semantic-ui-react";
+
+import { API_URL } from "../config";
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -16,6 +18,10 @@ class LoginForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentDidMount() {
+    if (localStorage.getItem("token")) this.props.history.replace("/settings");
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     const formData = {
@@ -24,10 +30,10 @@ class LoginForm extends React.Component {
     };
 
     axios
-      .post("http://localhost:9000/api/v1/login", formData)
+      .post(`${API_URL}/login`, formData)
       .then(response => {
         localStorage.setItem("token", response.data.data.token);
-        this.props.history.push("/settings");
+        this.props.history.replace("/settings");
       })
       .catch(err => {
         let catchError;
@@ -100,9 +106,9 @@ class LoginForm extends React.Component {
                 onChange={this.handleChange}
                 className="form-control"
               />
-              <Button type="submit" value="login" className="btn btn-primary">
+              <button type="submit" value="login" className="btn btn-primary">
                 Login
-              </Button>
+              </button>
               <Link to="/"> SignUp </Link>
             </Form>
           </Grid.Column>
