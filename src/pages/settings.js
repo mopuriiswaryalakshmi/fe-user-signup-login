@@ -134,6 +134,7 @@ class UserDetailsUpdateForm extends React.Component {
                 name="profilePicture"
                 onChange={this.fileChange}
                 className="form-control"
+                accept="image/png,image/jpeg"
               />
               <Form.Input
                 placeholder="Gender"
