@@ -35,7 +35,7 @@ class RegistrationForm extends React.Component {
       password: this.state.password,
       confirmPassword: this.state.confirmPassword
     };
-    // client side validation
+
     axios
       .post("http://localhost:9000/api/v1/signup", formData)
 

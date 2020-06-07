@@ -16,27 +16,17 @@ class LoginForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  logout() {
-    // localStorage.clear();
-    // this.props.history.push("/");
-    const token = localStorage.getItem("token");
-    console.log(token);
-  }
-
   handleSubmit(event) {
     event.preventDefault();
     const formData = {
       email: this.state.email,
       password: this.state.password
     };
-    // client side validation
 
     axios
       .post("http://localhost:9000/api/v1/login", formData)
       .then(response => {
-        console.log(response.data);
         localStorage.setItem("token", response.data.data.token);
-        console.log(response.data.data.token);
         this.props.history.push("/settings");
       })
       .catch(err => {
@@ -65,15 +55,6 @@ class LoginForm extends React.Component {
   }
 
   errorMessageFormatter() {
-    // const { errors } = this.state.serverErrorMessages;
-    // return Object.keys(errors).map(key => {
-    //   return (
-    //     <li key={key}>
-    //       {" "}
-    //       <strong> {key} : </strong> {errors[key].join(", ")}{" "}
-    //     </li>
-    //   );
-    // });
     return <p>{this.state.serverErrorMessages}</p>;
   }
 
