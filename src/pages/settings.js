@@ -2,6 +2,9 @@ import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Form, Grid, Header } from "semantic-ui-react";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 import { API_URL } from "../config";
 
@@ -28,6 +31,7 @@ class UserDetailsUpdateForm extends React.Component {
 
   logout() {
     localStorage.clear();
+    this.props.history.replace("/login");
   }
 
   handleSubmit(event) {
@@ -52,6 +56,7 @@ class UserDetailsUpdateForm extends React.Component {
           serverErrorMessages: ""
         });
         alert("SucessFully Submitted");
+        this.logout();
       })
       .catch(err => {
         let catchError;
@@ -75,6 +80,12 @@ class UserDetailsUpdateForm extends React.Component {
       [event.target.name]: event.target.value
     });
   }
+
+  dateChange = date => {
+    this.setState({
+      dateOfBirth: date
+    });
+  };
 
   getBase64(file, cb) {
     let reader = new FileReader();
@@ -152,14 +163,14 @@ class UserDetailsUpdateForm extends React.Component {
                 onChange={this.handleChange}
                 className="form-control"
               />
-              <Form.Input
-                placeholder="Date Of Birth"
-                type="text"
-                value={this.state.dateOfBirth}
-                name="dateOfBirth"
-                onChange={this.handleChange}
-                className="form-control"
+              <DatePicker
+                placeholderText="Date Of Birth"
+                selected={this.state.dateOfBirth}
+                onChange={this.dateChange}
+                maxDate={new Date()}
               />
+              <br />
+              <br />
               <button type="submit" className="btn btn-primary">
                 Submit
               </button>
